@@ -1,4 +1,4 @@
-
+import ot
 import numpy as np
 import torch
 from torch import device, nn
@@ -172,6 +172,23 @@ class CLUBSample(nn.Module):  # Sampled version of the CLUB estimator
         logvar = self.tanh(logvar)
 
         return mu, logvar
+
+    def optimal_transport_distance(self, x_samples, y_samples):
+        mu, _ = self.get_mu_logvar(x_samples)
+
+        # Compute pairwise cost matrix between x and y
+        cost_matrix = torch.cdist(mu, y_samples, p=2).cpu().detach().numpy()
+
+        # Define uniform distributions over the samples
+        n = mu.shape[0]
+        m = y_samples.shape[0]
+        uniform_x = torch.ones(n) / n
+        uniform_y = torch.ones(m) / m
+
+        # Compute the optimal transport distance using POT
+        ot_distance = ot.emd2(uniform_x.numpy(), uniform_y.numpy(), cost_matrix)
+
+        return ot_distance
      
         
     def loglikeli(self, x_samples, y_samples):
