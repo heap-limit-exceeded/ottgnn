@@ -148,14 +148,6 @@ class CIGNN(nn.Module):
             if self.sc:
                 nn.init.xavier_normal_(self.W_c3_list[i])
 
-    # if self.distance=='wasserstein_2':
-    #     self.d = ot.wasserstein_circle(self.memory.emb, self.memory.emb,'square_loss')
-    # elif self.distance=='wasserstein_1':
-    #     self.d = ot.wasserstein_1d(self.memory.emb, self.memory.emb)
-    # elif self.distance=='gromov':
-    #     self.d = ot.gromov.gromov_wasserstein(self.memory.emb, self.memory.emb, self.h, self.h, 'square_loss', verbose=True)
-    # elif self.distance=='sinkhorn':
-    #     self.d = ot.sinkhorn(self.memory.emb, self.memory.emb, 0.1, 1000)
 
     # select layers
     self.W_1 = nn.Linear(self.node_emb_dim + self.node_emb_dim * 2 + edge_emb_dim, self.node_emb_dim).to(self.device)
