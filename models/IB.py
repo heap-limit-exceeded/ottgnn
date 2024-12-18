@@ -193,7 +193,9 @@ class CLUBSample(nn.Module):  # Sampled version of the CLUB estimator
         
     def loglikeli(self, x_samples, y_samples):
         mu, logvar = self.get_mu_logvar(x_samples)
-        return (-(mu - y_samples)**2 /(logvar.exp() + 1e-6)-logvar).sum(dim=1).mean(dim=0)
+        return self.optimal_transport_distance(x_samples, y_samples)
+        # uncomment for loglikelihood
+        # return (-(mu - y_samples)**2 /(logvar.exp() + 1e-6)-logvar).sum(dim=1).mean(dim=0)
     
 
     def forward(self, x_samples, y_samples):
